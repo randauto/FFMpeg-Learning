@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <Button
+        android:id="@+id/btnSelectAudio"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Select Audio"/>
+
+    <Button
+        android:id="@+id/btnReverse"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Reverse"/>
+
+    <Button
+        android:id="@+id/btnVolumeDown"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Volume Down"/>
+
+    <Button
+        android:id="@+id/btnVolumeUp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Volume Up"/>
+
+    <Button
+        android:id="@+id/btnSpeedUp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Speed Up"/>
+
+    <Button
+        android:id="@+id/btnSpeedDown"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Speed Down"/>
+
+    <Button
+        android:id="@+id/btnConvertAudio"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Convert Audio To .WAV"/>
+
+    <Button
+        android:id="@+id/btnGetInfo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Get Info"/>
+</LinearLayout>
