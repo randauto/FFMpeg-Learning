@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal"
+    tools:context=".MainActivity">
+
+    <FrameLayout
+        android:id="@+id/viewRoot"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <View
+            android:id="@+id/viewGradient"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_gravity="center"
+            android:background="@color/black" />
+
+        <RelativeLayout
+            android:id="@+id/viewStart"
+            android:layout_width="100dp"
+            android:layout_height="50dp"
+            android:layout_gravity="center_vertical|start"
+            android:background="#31D331"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+
+            <LinearLayout
+                android:id="@+id/viewStartDrag"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <View
+                    android:id="@+id/viewCircleStart"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:background="@color/white" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="00:18"
+                    android:textColor="@color/white" />
+
+            </LinearLayout>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/viewEnd"
+            android:layout_width="100dp"
+            android:layout_height="50dp"
+            android:layout_gravity="center_vertical|end"
+            android:background="#31D331"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+
+            <LinearLayout
+                android:id="@+id/viewEndDrag"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <View
+                    android:id="@+id/viewCircleEnd"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:background="@color/white" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="00:18"
+                    android:textColor="@color/white" />
+
+            </LinearLayout>
+
+        </RelativeLayout>
+
+
+    </FrameLayout>
+
+
+</LinearLayout>

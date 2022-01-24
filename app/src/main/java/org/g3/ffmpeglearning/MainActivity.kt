@@ -1,92 +1,100 @@
 package org.g3.ffmpeglearning
 
-import android.Manifest
-import android.media.MediaPlayer
+import android.annotation.SuppressLint
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.os.Environment
-import android.speech.tts.TextToSpeech
-import kotlinx.android.synthetic.main.activity_main.*
-import java.util.*
-import android.widget.Toast
+import android.util.Log
+import android.view.MotionEvent
+import android.view.View
+import android.view.ViewTreeObserver
+import kotlinx.android.synthetic.main.activity_main2.*
+import kotlin.math.abs
+import android.util.DisplayMetrics
 
-import android.content.pm.PackageManager
-import androidx.core.content.ContextCompat
-import com.karumi.dexter.Dexter
-import com.karumi.dexter.MultiplePermissionsReport
-import com.karumi.dexter.PermissionToken
-import com.karumi.dexter.listener.PermissionRequest
-import com.karumi.dexter.listener.multi.MultiplePermissionsListener
-
-class MainActivity : AppCompatActivity() {
-
-    var textToSpeech: TextToSpeech? = null
-    var mp: MediaPlayer? = null
-
-    private var mAudioFilename = ""
-    private val mUtteranceID = "totts"
 
 
 
+class MainActivity : AppCompatActivity() {
+    var widthStart = 0
+    var widthEnd = 0
+    var widthScreen = 0
+    var viewStartX = 0f
+    var viewEndX = 0f
+    @SuppressLint("ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.activity_main2)
 
-        if (!checkPermission()) {
-            requestPermission()
-        }
-        // create an object textToSpeech and adding features into it
-        textToSpeech = TextToSpeech(applicationContext) { i ->
-            // if No error is found then only it will run
-            if (i != TextToSpeech.ERROR) {
-                // To Choose language of speech
-                textToSpeech!!.language = Locale.ENGLISH
+
+        viewStart?.viewTreeObserver!!.addOnGlobalLayoutListener { widthStart = viewStart?.layoutParams!!.width }
+
+        viewEnd?.viewTreeObserver!!.addOnGlobalLayoutListener { widthEnd = viewEnd?.layoutParams!!.width }
+
+
+        val displayMetrics = DisplayMetrics()
+        windowManager.defaultDisplay.getMetrics(displayMetrics)
+        val height = displayMetrics.heightPixels
+        val widthScreen = displayMetrics.widthPixels
+
+        viewStartDrag?.setOnTouchListener { v, event ->
+            when (event!!.action) {
+                MotionEvent.ACTION_DOWN -> {
+                    viewStartX = event.x
+                    Log.d("TTTT", "ACTION_DOWN")
+                    Log.d("TTTT", "widthScreen = $widthScreen")
+                    Log.d("TTTT", "widthStart = $widthStart")
+                    Log.d("TTTT", "widthEnd = $widthEnd")
+                }
+
+                MotionEvent.ACTION_MOVE -> {
+
+
+                    Log.d("TTTT", "ACTION_MOVE")
+                    var newX = event.x
+                    var dX = newX - viewStartX
+                    val newWidth = widthStart + dX
+
+                    widthEnd = viewEnd.layoutParams.width
+                    Log.d("TTTT", "newWidth = $newWidth")
+                    if (newWidth + widthEnd < widthScreen && newWidth > 150) {
+                        viewStart.layoutParams.width = (widthStart + dX).toInt()
+                        viewStart.requestLayout()
+                    }
+                }
+
             }
-        }
-        btnText.setOnClickListener {
 
-            textToSpeech!!.speak(edit_text_speech.text.toString(), TextToSpeech.QUEUE_FLUSH, null)
-            fileCreate()
-        }
-
-
-
-    }
-
-
-
-    fun fileCreate() {
-
-        val myHashRender= HashMap<String?, String?>()
-
-        val destFileName = Environment.getExternalStoragePublicDirectory("/Audio/").toString() + "${System.currentTimeMillis()}.wav"
-        Toast.makeText(this, "" + destFileName, Toast.LENGTH_SHORT).show()
-        myHashRender[TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID] = edit_text_speech.text.toString()
-        textToSpeech!!.synthesizeToFile(edit_text_speech.text.toString(), myHashRender, destFileName)
-
-    }
-    private fun checkPermission(): Boolean {
-        val result: Int = ContextCompat.checkSelfPermission(applicationContext, Manifest.permission.READ_EXTERNAL_STORAGE)
-        val result1: Int = ContextCompat.checkSelfPermission(applicationContext, Manifest.permission.WRITE_EXTERNAL_STORAGE)
-        val result2: Int = ContextCompat.checkSelfPermission(applicationContext, Manifest.permission.MODIFY_AUDIO_SETTINGS)
-        return if (result == PackageManager.PERMISSION_GRANTED && result1 == PackageManager.PERMISSION_GRANTED && result2 == PackageManager.PERMISSION_GRANTED) {
             true
-        } else {
-            false
+        }
+
+        viewEndDrag?.setOnTouchListener { v, event ->
+            when (event!!.action) {
+                MotionEvent.ACTION_DOWN -> {
+                    viewEndX = event.x
+                    Log.d("TTTT", "ACTION_DOWN")
+                    Log.d("TTTT", "widthScreen = $widthScreen")
+                    Log.d("TTTT", "widthStart = $widthStart")
+                    Log.d("TTTT", "widthEnd = $widthEnd")
+                }
+
+                MotionEvent.ACTION_MOVE -> {
+
+
+                    Log.d("TTTT", "ACTION_MOVE")
+                    var newX = event.x
+                    var dX = viewEndX - newX
+                    val newWidth = widthEnd + dX
+                    widthStart = viewStart.layoutParams.width
+                    Log.d("TTTT", "newWidth = $newWidth")
+                    if (newWidth + widthStart < widthScreen && newWidth > 150) {
+                        viewEnd.layoutParams.width = (widthEnd + dX).toInt()
+                        viewEnd.requestLayout()
+                    }
+                }
+
+            }
+
+            true
         }
     }
-
-    private fun requestPermission() {
-        Dexter.withActivity(this)
-            .withPermissions(Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.MODIFY_AUDIO_SETTINGS)
-            .withListener(object : MultiplePermissionsListener {
-                override
-                fun onPermissionsChecked(report: MultiplePermissionsReport?) {}
-                override
-                fun onPermissionRationaleShouldBeShown(permissions: List<PermissionRequest?>?, token: PermissionToken?) {}
-            }).check()
-    }
-
-
-
 }
