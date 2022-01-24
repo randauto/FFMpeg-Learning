@@ -1,17 +1,13 @@
 package org.g3.ffmpeglearning
 
 import android.annotation.SuppressLint
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.DisplayMetrics
 import android.util.Log
 import android.view.MotionEvent
-import android.view.View
-import android.view.ViewTreeObserver
+import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_main2.*
-import kotlin.math.abs
-import android.util.DisplayMetrics
-
-
+import kotlin.math.roundToInt
 
 
 class MainActivity : AppCompatActivity() {
@@ -20,6 +16,7 @@ class MainActivity : AppCompatActivity() {
     var widthScreen = 0
     var viewStartX = 0f
     var viewEndX = 0f
+
     @SuppressLint("ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,7 +30,6 @@ class MainActivity : AppCompatActivity() {
 
         val displayMetrics = DisplayMetrics()
         windowManager.defaultDisplay.getMetrics(displayMetrics)
-        val height = displayMetrics.heightPixels
         val widthScreen = displayMetrics.widthPixels
 
         viewStartDrag?.setOnTouchListener { v, event ->
@@ -44,22 +40,30 @@ class MainActivity : AppCompatActivity() {
                     Log.d("TTTT", "widthScreen = $widthScreen")
                     Log.d("TTTT", "widthStart = $widthStart")
                     Log.d("TTTT", "widthEnd = $widthEnd")
+                    widthEnd = viewEnd.layoutParams.width
                 }
 
                 MotionEvent.ACTION_MOVE -> {
-
-
                     Log.d("TTTT", "ACTION_MOVE")
                     var newX = event.x
                     var dX = newX - viewStartX
-                    val newWidth = widthStart + dX
+                    val newWidth : Int = (widthStart + dX).toInt()
 
-                    widthEnd = viewEnd.layoutParams.width
+
                     Log.d("TTTT", "newWidth = $newWidth")
-                    if (newWidth + widthEnd < widthScreen && newWidth > 150) {
-                        viewStart.layoutParams.width = (widthStart + dX).toInt()
-                        viewStart.requestLayout()
+                    when {
+                        newWidth <= 150 -> {
+                            viewStart.layoutParams.width = 150
+                        }
+                        newWidth + widthEnd <= widthScreen -> {
+                            viewStart.layoutParams.width = newWidth
+                        }
+                        else -> {
+                            viewStart.layoutParams.width = widthScreen - widthEnd
+                        }
                     }
+                    viewStart.requestLayout()
+
                 }
 
             }
@@ -75,21 +79,28 @@ class MainActivity : AppCompatActivity() {
                     Log.d("TTTT", "widthScreen = $widthScreen")
                     Log.d("TTTT", "widthStart = $widthStart")
                     Log.d("TTTT", "widthEnd = $widthEnd")
+
+                    widthStart = viewStart.layoutParams.width
                 }
 
                 MotionEvent.ACTION_MOVE -> {
-
-
                     Log.d("TTTT", "ACTION_MOVE")
                     var newX = event.x
                     var dX = viewEndX - newX
-                    val newWidth = widthEnd + dX
-                    widthStart = viewStart.layoutParams.width
+                    val newWidth : Int = (widthEnd + dX).roundToInt()
                     Log.d("TTTT", "newWidth = $newWidth")
-                    if (newWidth + widthStart < widthScreen && newWidth > 150) {
-                        viewEnd.layoutParams.width = (widthEnd + dX).toInt()
-                        viewEnd.requestLayout()
+                    when {
+                        newWidth >= 150 -> {
+                            viewEnd.layoutParams.width = 150
+                        }
+                        newWidth + widthStart <= widthScreen -> {
+                            viewEnd.layoutParams.width = newWidth
+                        }
+                        else -> {
+                            viewEnd.layoutParams.width = widthScreen - widthStart
+                        }
                     }
+                    viewEnd.requestLayout()
                 }
 
             }

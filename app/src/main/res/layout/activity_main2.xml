@@ -20,7 +20,7 @@
             android:layout_gravity="center"
             android:background="@color/black" />
 
-        <RelativeLayout
+        <org.g3.ffmpeglearning.views.MyRelativeLayout
             android:id="@+id/viewStart"
             android:layout_width="100dp"
             android:layout_height="50dp"
@@ -53,9 +53,9 @@
 
             </LinearLayout>
 
-        </RelativeLayout>
+        </org.g3.ffmpeglearning.views.MyRelativeLayout>
 
-        <RelativeLayout
+        <org.g3.ffmpeglearning.views.MyRelativeLayout
             android:id="@+id/viewEnd"
             android:layout_width="100dp"
             android:layout_height="50dp"
@@ -88,7 +88,7 @@
 
             </LinearLayout>
 
-        </RelativeLayout>
+        </org.g3.ffmpeglearning.views.MyRelativeLayout>
 
 
     </FrameLayout>
