@@ -3,31 +3,38 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="horizontal"
+    android:orientation="vertical"
     tools:context=".MainActivity">
 
     <FrameLayout
         android:id="@+id/viewRoot"
         android:layout_width="match_parent"
         android:layout_height="150dp"
+        android:background="#2C2929"
         android:gravity="center_vertical"
         android:orientation="horizontal">
 
         <View
             android:id="@+id/viewGradient"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="15dp"
             android:layout_gravity="center"
-            android:background="@color/black" />
+            android:background="#E10A0A" />
 
         <org.g3.ffmpeglearning.views.MyRelativeLayout
             android:id="@+id/viewStart"
             android:layout_width="100dp"
             android:layout_height="50dp"
             android:layout_gravity="center_vertical|start"
-            android:background="#31D331"
             android:gravity="center_vertical"
             android:orientation="horizontal">
+
+            <View
+                android:layout_toStartOf="@+id/viewStartDrag"
+                android:layout_width="wrap_content"
+                android:layout_height="15dp"
+                android:layout_centerInParent="true"
+                android:background="#31D331" />
 
 
             <LinearLayout
@@ -46,6 +53,7 @@
                     android:background="@color/white" />
 
                 <TextView
+                    android:id="@+id/tvStart"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="00:18"
@@ -60,10 +68,15 @@
             android:layout_width="100dp"
             android:layout_height="50dp"
             android:layout_gravity="center_vertical|end"
-            android:background="#31D331"
             android:gravity="center_vertical"
             android:orientation="horizontal">
 
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="15dp"
+                android:layout_toEndOf="@+id/viewEndDrag"
+                android:layout_centerInParent="true"
+                android:background="#31D331" />
 
             <LinearLayout
                 android:id="@+id/viewEndDrag"
@@ -81,17 +94,28 @@
                     android:background="@color/white" />
 
                 <TextView
+                    android:id="@+id/tvEnd"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="00:18"
                     android:textColor="@color/white" />
 
             </LinearLayout>
-
         </org.g3.ffmpeglearning.views.MyRelativeLayout>
-
-
     </FrameLayout>
+
+
+    <TextView
+        android:id="@+id/tvDuration"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Duration:" />
+
+    <Button
+        android:id="@+id/btnChooseAudio"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Choose Audio" />
 
 
 </LinearLayout>

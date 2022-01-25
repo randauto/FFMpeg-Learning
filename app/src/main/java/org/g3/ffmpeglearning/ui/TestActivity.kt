@@ -20,7 +20,7 @@ import org.g3.ffmpeglearning.R
 import java.io.File
 
 
-class TestActivity : AppCompatActivity() {
+open class TestActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,50 +31,50 @@ class TestActivity : AppCompatActivity() {
         onClick()
     }
 
-    private var pathAudio: String = ""
+    protected var pathAudio: String = ""
 
     private fun onClick() {
-        btnSelectAudio.setOnClickListener {
+        btnSelectAudio?.setOnClickListener {
             pickAudio()
         }
 
-        btnReverse.setOnClickListener {
+        btnReverse?.setOnClickListener {
             if (pathAudio.isNotEmpty()) {
                 AudioManager.reverseAudio(pathAudio)
             }
         }
 
-        btnVolumeDown.setOnClickListener {
+        btnVolumeDown?.setOnClickListener {
             if (pathAudio.isNotEmpty()) {
                 AudioManager.volumeDown(pathAudio)
             }
         }
 
-        btnVolumeUp.setOnClickListener {
+        btnVolumeUp?.setOnClickListener {
             if (pathAudio.isNotEmpty()) {
                 AudioManager.volumeUp(pathAudio)
             }
         }
 
-        btnSpeedUp.setOnClickListener {
+        btnSpeedUp?.setOnClickListener {
             if (pathAudio.isNotEmpty()) {
                 AudioManager.speedUpAudio(pathAudio)
             }
         }
 
-        btnSpeedDown.setOnClickListener {
+        btnSpeedDown?.setOnClickListener {
             if (pathAudio.isNotEmpty()) {
                 AudioManager.speedDownAudio(pathAudio)
             }
         }
 
-        btnConvertAudio.setOnClickListener {
+        btnConvertAudio?.setOnClickListener {
             if (pathAudio.isNotEmpty()) {
                 AudioManager.convertToFormat(pathAudio, "wav")
             }
         }
 
-        btnGetInfo.setOnClickListener {
+        btnGetInfo?.setOnClickListener {
             if (pathAudio.isNotEmpty()) {
                 val info = AudioManager.getInfoFileAudio(pathAudio)
                 btnGetInfo.text = "Info $info"
@@ -82,7 +82,7 @@ class TestActivity : AppCompatActivity() {
         }
     }
 
-    private fun pickAudio() {
+    protected fun pickAudio() {
         val intent_upload = Intent()
         intent_upload.type = "audio/*"
         intent_upload.action = Intent.ACTION_GET_CONTENT

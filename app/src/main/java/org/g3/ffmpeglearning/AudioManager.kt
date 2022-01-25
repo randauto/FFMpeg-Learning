@@ -9,6 +9,10 @@ import org.g3.ffmpeglearning.module.SpeedUpDownAudioCmd
 import org.g3.ffmpeglearning.module.VolumeDownCmd
 import java.io.File
 import java.lang.StringBuilder
+import android.media.MediaMetadataRetriever
+
+
+
 
 object AudioManager {
 
@@ -151,6 +155,63 @@ object AudioManager {
         }) {
             // CALLED WHEN SESSION GENERATES STATISTICS
         }
+    }
+
+    fun getDuration(file: File): Long {
+        val mediaMetadataRetriever = MediaMetadataRetriever()
+        mediaMetadataRetriever.setDataSource(file.absolutePath)
+        val durationStr = mediaMetadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION)
+//        return formateMilliSeccond(durationStr!!.toLong())
+        return durationStr!!.toLong()
+    }
+
+    private fun formateMilliSeccond(milliseconds: Long): String? {
+        var finalTimerString = ""
+        var secondsString = ""
+
+        // Convert total duration into time
+        val hours = (milliseconds / (1000 * 60 * 60)).toInt()
+        val minutes = (milliseconds % (1000 * 60 * 60)).toInt() / (1000 * 60)
+        val seconds = (milliseconds % (1000 * 60 * 60) % (1000 * 60) / 1000).toInt()
+
+        // Add hours if there
+        if (hours > 0) {
+            finalTimerString = "$hours:"
+        }
+
+        // Prepending 0 to seconds if it is one digit
+        secondsString = if (seconds < 10) {
+            "0$seconds"
+        } else {
+            "" + seconds
+        }
+        finalTimerString = "$finalTimerString$minutes:$secondsString"
+
+        //      return  String.format("%02d Min, %02d Sec",
+        //                TimeUnit.MILLISECONDS.toMinutes(milliseconds),
+        //                TimeUnit.MILLISECONDS.toSeconds(milliseconds) -
+        //                        TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(milliseconds)));
+
+        // return timer string
+        return finalTimerString
+    }
+
+    fun formatSeconds(millisSeconds: Long): String? {
+        var time = millisSeconds
+        if (time < 1000) {
+            return "00:00"
+        }
+        val seconds: Long = millisSeconds / 1000 % 60
+        val minutes: Long = millisSeconds / (1000 * 60) % 60
+        val hours: Long = millisSeconds / (1000 * 60 * 60)
+
+        val b = StringBuilder()
+        //b.append(if (hours == 0L) "00" else if (hours < 10) "0$hours" else hours.toString())
+        //b.append(":")
+        b.append(if (minutes == 0L) "00" else if (minutes < 10) "0$minutes" else minutes.toString())
+        b.append(":")
+        b.append(if (seconds == 0L) "00" else if (seconds < 10) "0$seconds" else seconds.toString())
+        return b.toString()
     }
 
 }
