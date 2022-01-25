@@ -4,10 +4,11 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.util.DisplayMetrics
 import android.util.Log
 import android.view.MotionEvent
+import android.view.View
 import android.widget.TextView
+import androidx.core.view.marginStart
 import kotlinx.android.synthetic.main.activity_main2.*
 import org.g3.ffmpeglearning.ui.TestActivity
 import java.io.File
@@ -16,23 +17,30 @@ import kotlin.math.roundToInt
 
 class MainActivity : TestActivity() {
     var widthStart = 0
+    var widthStartTvFake = 0
+    var widthEndTvFake = 0
     var widthEnd = 0
     var viewStartX = 0f
     var viewEndX = 0f
     var widthScreen = 0
-    var widthMin = 0
+    var widthMinStart = 0
+    var widthMinEnd = 0
 
     @SuppressLint("ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main2)
 
-        viewRoot?.viewTreeObserver!!.addOnGlobalLayoutListener {
-            widthScreen = viewRoot.measuredWidth
+        viewStartDrag?.viewTreeObserver!!.addOnGlobalLayoutListener {
+            widthMinStart = viewStartDrag.measuredWidth
+            widthMinStart += widthMinStart
+            widthMinStart += viewBgStart.marginStart
+            widthScreen = viewGradient.measuredWidth
         }
-
         viewEndDrag?.viewTreeObserver!!.addOnGlobalLayoutListener {
-            widthMin = viewEndDrag.measuredWidth
+            widthMinEnd = viewEndDrag.measuredWidth
+            widthMinEnd += widthMinEnd
+            widthMinEnd += viewEndDrag.marginStart
         }
 
         setupViewStart()
@@ -53,6 +61,15 @@ class MainActivity : TestActivity() {
             widthStart = viewStart.measuredWidth
         }
 
+        tvStart?.viewTreeObserver!!.addOnGlobalLayoutListener {
+            widthStartTvFake = tvStart.measuredWidth
+        }
+
+
+        tvEnd?.viewTreeObserver!!.addOnGlobalLayoutListener {
+            widthEndTvFake = tvEnd.measuredWidth
+        }
+
 
 
         viewStartDrag?.setOnTouchListener { v, event ->
@@ -70,32 +87,36 @@ class MainActivity : TestActivity() {
                     Log.d("TTTT", "ACTION_MOVE")
                     var newX = event.x
                     var dX = newX - viewStartX
-                    var newWidth: Int = (widthStart + dX).toInt()
+                    var newWidthStart: Int = (widthStart + dX).toInt()
 
 
-                    Log.d("TTTT", "newWidth = $newWidth")
+                    Log.d("TTTT", "newWidth = $newWidthStart")
                     when {
-                        newWidth <= widthMin -> {
-                            newWidth = widthMin
-                            viewStart.layoutParams.width = newWidth
+                        newWidthStart <= widthMinStart -> {
+                            newWidthStart = widthMinStart
                         }
-                        newWidth + widthEnd <= widthScreen -> {
-                            viewStart.layoutParams.width = newWidth
+                        newWidthStart + widthEnd <= widthScreen -> {
                         }
                         else -> {
-                            newWidth = widthScreen - widthEnd
-                            viewStart.layoutParams.width = newWidth
+                            newWidthStart = widthScreen - widthEnd
                         }
                     }
 
-                    viewStart.requestLayout()
-                    calculateDurationStart(newWidth)
+                    changeWidthView(viewStart, newWidthStart)
+                    val newWidthStartFake = newWidthStart - (widthStartTvFake / 2)
+                    changeWidthView(viewFakeBgStart, newWidthStartFake)
+                    calculateDurationStart(newWidthStart)
                 }
 
             }
 
             true
         }
+    }
+
+    private fun changeWidthView(view: View, width: Int) {
+        view?.layoutParams.width = width
+        view?.requestLayout()
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -123,20 +144,19 @@ class MainActivity : TestActivity() {
                     var newWidth: Int = (widthEnd + dX).roundToInt()
                     Log.d("TTTT", "newWidth = $newWidth")
                     when {
-                        newWidth <= widthMin -> {
-                            newWidth = widthMin
-                            viewEnd.layoutParams.width = newWidth
+                        newWidth <= widthMinEnd -> {
+                            newWidth = widthMinEnd
                         }
                         newWidth + widthStart <= widthScreen -> {
-                            viewEnd.layoutParams.width = newWidth
                         }
                         else -> {
                             newWidth = widthScreen - widthStart
-                            viewEnd.layoutParams.width = newWidth
                         }
                     }
 
-                    viewEnd.requestLayout()
+                    changeWidthView(viewEnd, newWidth)
+                    val newWidthStartFake = newWidth - (widthEndTvFake / 2)
+                    changeWidthView(viewFakeBgEnd, newWidthStartFake)
                     calculateDurationEnd(newWidth)
                 }
 
@@ -165,7 +185,7 @@ class MainActivity : TestActivity() {
         }
     }
 
-    var durationAudio : Long = 0
+    var durationAudio: Long = 0
     private fun getInfoFile(pathAudio: String?) {
         pathAudio?.let {
             durationAudio = AudioManager.getDuration(File(pathAudio))
@@ -185,8 +205,15 @@ class MainActivity : TestActivity() {
 
     private fun calculateDurationEnd(newWidth: Int) {
         try {
-            val durationEnd : Long = (newWidth * durationAudio / widthScreen)
-            setTextValue(tvEnd, durationEnd)
+            var durationEnd: Float = 0f
+
+            if (newWidth == widthMinEnd) {
+                durationEnd = 0f
+            } else {
+                durationEnd = (widthScreen - newWidth * durationAudio / widthScreen).toFloat()
+            }
+
+            setTextValue(tvEnd, durationEnd.toLong())
         } catch (ex: Exception) {
             ex.printStackTrace()
         }
@@ -195,8 +222,13 @@ class MainActivity : TestActivity() {
 
     private fun calculateDurationStart(newWidth: Int) {
         try {
-            val durationStart : Long = newWidth * durationAudio / widthScreen
-            setTextValue(tvStart, durationStart)
+            var durationStart: Float = 0f
+            if (newWidth == widthMinStart) {
+                durationStart = 0f
+            } else {
+                durationStart = ((newWidth * durationAudio) / widthScreen).toFloat()
+            }
+            setTextValue(tvStart, durationStart.toLong())
         } catch (ex: Exception) {
             ex.printStackTrace()
         }

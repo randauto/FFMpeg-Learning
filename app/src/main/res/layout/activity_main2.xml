@@ -3,113 +3,142 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/black"
     android:orientation="vertical"
     tools:context=".MainActivity">
 
-    <FrameLayout
+    <LinearLayout
         android:id="@+id/viewRoot"
         android:layout_width="match_parent"
-        android:layout_height="150dp"
-        android:background="#2C2929"
+        android:layout_height="70dp"
+        android:layout_gravity="center"
+        android:background="#33274D"
         android:gravity="center_vertical"
-        android:orientation="horizontal">
+        android:orientation="vertical">
 
-        <View
-            android:id="@+id/viewGradient"
+
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="15dp"
-            android:layout_gravity="center"
-            android:background="#E10A0A" />
-
-        <org.g3.ffmpeglearning.views.MyRelativeLayout
-            android:id="@+id/viewStart"
-            android:layout_width="100dp"
-            android:layout_height="50dp"
-            android:layout_gravity="center_vertical|start"
-            android:gravity="center_vertical"
-            android:orientation="horizontal">
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:orientation="vertical">
 
             <View
-                android:layout_toStartOf="@+id/viewStartDrag"
-                android:layout_width="wrap_content"
-                android:layout_height="15dp"
-                android:layout_centerInParent="true"
-                android:background="#31D331" />
-
-
-            <LinearLayout
-                android:id="@+id/viewStartDrag"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_centerVertical="true"
-                android:gravity="center"
-                android:orientation="vertical">
-
-                <View
-                    android:id="@+id/viewCircleStart"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:background="@color/white" />
-
-                <TextView
-                    android:id="@+id/tvStart"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="00:18"
-                    android:textColor="@color/white" />
-
-            </LinearLayout>
-
-        </org.g3.ffmpeglearning.views.MyRelativeLayout>
-
-        <org.g3.ffmpeglearning.views.MyRelativeLayout
-            android:id="@+id/viewEnd"
-            android:layout_width="100dp"
-            android:layout_height="50dp"
-            android:layout_gravity="center_vertical|end"
-            android:gravity="center_vertical"
-            android:orientation="horizontal">
-
-            <View
+                android:id="@+id/viewGradient"
                 android:layout_width="match_parent"
-                android:layout_height="15dp"
-                android:layout_toEndOf="@+id/viewEndDrag"
+                android:layout_height="5dp"
                 android:layout_centerInParent="true"
-                android:background="#31D331" />
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:background="@drawable/bg_view_center" />
 
             <LinearLayout
-                android:id="@+id/viewEndDrag"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:id="@+id/viewStart"
+                android:layout_width="100dp"
+                android:layout_height="30dp"
                 android:layout_alignParentStart="true"
-                android:layout_centerVertical="true"
+                android:layout_centerInParent="true"
                 android:gravity="center"
-                android:orientation="vertical">
+                android:orientation="horizontal">
 
                 <View
-                    android:id="@+id/viewCircleEnd"
+                    android:id="@+id/viewBgStart"
+                    android:layout_width="0dp"
+                    android:layout_height="5dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/bg_view_start_end" />
+
+                <ImageView
+                    android:padding="10dp"
+                    android:id="@+id/viewStartDrag"
                     android:layout_width="20dp"
                     android:layout_height="20dp"
-                    android:background="@color/white" />
-
-                <TextView
-                    android:id="@+id/tvEnd"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="00:18"
-                    android:textColor="@color/white" />
+                    android:src="@drawable/bg_view_dot"
+                    android:translationX="-10dp" />
 
             </LinearLayout>
-        </org.g3.ffmpeglearning.views.MyRelativeLayout>
-    </FrameLayout>
+
+            <RelativeLayout
+                android:id="@+id/viewEnd"
+                android:layout_width="100dp"
+                android:layout_height="30dp"
+                android:layout_alignParentEnd="true"
+                android:layout_centerInParent="true"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+
+                <View
+                    android:id="@+id/viewBgEnd"
+                    android:layout_width="wrap_content"
+                    android:layout_height="5dp"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="10dp"
+                    android:background="@drawable/bg_view_start_end" />
+
+                <ImageView
+                    android:id="@+id/viewEndDrag"
+                    android:layout_width="10dp"
+                    android:layout_height="10dp"
+                    android:layout_alignParentStart="true"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/bg_view_dot" />
+
+            </RelativeLayout>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <View
+                android:id="@+id/viewFakeBgStart"
+                android:layout_width="80dp"
+                android:layout_height="5dp"
+                android:layout_alignParentStart="true"
+                android:layout_centerInParent="true"
+                android:visibility="invisible" />
+
+            <TextView
+                android:id="@+id/tvStart"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toEndOf="@+id/viewFakeBgStart"
+                android:text="00:18"
+                android:textColor="@color/white"
+                android:textSize="14sp"
+                android:translationX="-10dp" />
+
+
+            <TextView
+                android:id="@+id/tvEnd"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toStartOf="@+id/viewFakeBgEnd"
+                android:text="00:18"
+                android:textColor="@color/white"
+                android:textSize="14sp"
+                android:translationX="5dp" />
+
+            <View
+                android:id="@+id/viewFakeBgEnd"
+                android:layout_width="80dp"
+                android:layout_height="5dp"
+                android:layout_alignParentEnd="true"
+                android:layout_centerInParent="true"
+                android:visibility="invisible" />
+        </RelativeLayout>
+
+    </LinearLayout>
 
 
     <TextView
         android:id="@+id/tvDuration"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Duration:" />
+        android:text="Duration:"
+        android:textColor="@color/white" />
 
     <Button
         android:id="@+id/btnChooseAudio"
