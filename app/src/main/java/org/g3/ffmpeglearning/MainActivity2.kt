@@ -6,21 +6,18 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
-import android.view.GestureDetector
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewTreeObserver
 import android.widget.TextView
-import androidx.core.view.marginEnd
 import androidx.core.view.marginStart
-import kotlinx.android.synthetic.main.activity_main2.*
+import kotlinx.android.synthetic.main.activity_main3.*
 import org.g3.ffmpeglearning.ui.TestActivity
 import org.g3.ffmpeglearning.views.IRangeSeekbarListener
 import java.io.File
-import kotlin.math.roundToInt
 
 
-class MainActivity : TestActivity() {
+class MainActivity2 : TestActivity() {
     var widthStart = 0
     var widthStartTvFake = 0
     var widthEndTvFake = 0
@@ -35,7 +32,7 @@ class MainActivity : TestActivity() {
     @SuppressLint("ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main2)
+        setContentView(R.layout.activity_main3)
         viewStartDrag?.viewTreeObserver!!.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
             override fun onGlobalLayout() {
                 Log.d("viewStartDrag", "viewStartDrag.width = ${viewStartDrag.measuredWidth}")
@@ -48,11 +45,12 @@ class MainActivity : TestActivity() {
                 Log.d("TTTT", "widthMinStart = $widthMinStart")
             }
         })
-        viewEndDrag?.viewTreeObserver!!.addOnGlobalLayoutListener {
-            widthMinEnd = viewEndDrag.measuredWidth + viewBgEnd.marginEnd + viewEndDrag.paddingStart
 
-            Log.d("TTTT", "widthMinEnd = $widthMinEnd")
-        }
+        viewGradient?.viewTreeObserver!!.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
+            override fun onGlobalLayout() {
+                widthStart = viewGradient.measuredWidth
+            }
+        })
 
         viewGradient?.viewTreeObserver!!.addOnGlobalLayoutListener {
             widthSeekbarView = (viewGradient.measuredWidth + convertDpToPixel(45f, this)).toInt()
@@ -61,7 +59,6 @@ class MainActivity : TestActivity() {
         }
 
         setupViewStart()
-        setupViewEnd()
 
         onCLickView()
     }
@@ -87,83 +84,6 @@ class MainActivity : TestActivity() {
 
     @SuppressLint("ClickableViewAccessibility")
     private fun setupViewStart() {
-        val gestureDetectorStart = GestureDetector(this, object : GestureDetector.OnGestureListener {
-            override fun onDown(e: MotionEvent?): Boolean {
-                Log.d("TTTT", "GestureDetector  = onDown")
-                touchDownviewStartX = e!!.x
-                Log.d("TTTT", "ACTION_DOWN")
-                Log.d("TTTT", "widthScreen = $widthSeekbarView")
-                Log.d("TTTT", "widthStart = $widthStart")
-                Log.d("TTTT", "widthEnd = $widthEnd")
-                Log.d("TTTT", "widthMinStart = $widthMinStart")
-                widthEnd = viewEnd.layoutParams.width
-                return true
-            }
-
-            override fun onShowPress(e: MotionEvent?) {
-                Log.d("TTTT", "GestureDetector  = onShowPress")
-
-            }
-
-            override fun onSingleTapUp(e: MotionEvent?): Boolean {
-                Log.d("TTTT", "GestureDetector  = onSingleTapUp")
-                return true
-            }
-
-            override fun onScroll(e1: MotionEvent?, e2: MotionEvent?, distanceX: Float, distanceY: Float): Boolean {
-
-                return true
-            }
-
-            override fun onLongPress(e: MotionEvent?) {
-                Log.d("TTTT", "GestureDetector  = onLongPress")
-
-            }
-
-            override fun onFling(e1: MotionEvent?, e2: MotionEvent?, velocityX: Float, velocityY: Float): Boolean {
-                Log.d("TTTT", "GestureDetector = onFling velocityX = $velocityX")
-
-
-                if (Math.abs(velocityX) >=4000) {
-                    Log.d("TTTT", "GestureDetector  = ACTION_MOVE")
-                    Log.d("TTTT", "ACTION_MOVE")
-                    var newX1 = e1!!.x
-                    var newX2 = e2!!.x
-                    var dX = newX2 - newX1
-
-                    Log.d("TTTT", "dX = $dX")
-                    var newWidthStart: Int = (widthStart + dX).toInt()
-
-
-                    Log.d("TTTT", "newWidth = $newWidthStart")
-                    when {
-                        newWidthStart <= widthMinStart -> {
-                            newWidthStart = widthMinStart
-                        }
-                        newWidthStart + widthEnd >= widthSeekbarView -> {
-                            newWidthStart = widthSeekbarView - widthEnd
-                        }
-                    }
-
-                    changeWidthView(viewStart, newWidthStart)
-                    val newWidthStartFake = newWidthStart - (widthStartTvFake / 2)
-                    changeWidthView(viewFakeBgStart, newWidthStartFake)
-                    calculateDurationStart(newWidthStart)
-                }
-
-                return true
-            }
-
-        })
-
-        viewStart?.viewTreeObserver!!.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
-            override fun onGlobalLayout() {
-                widthStart = viewStart.measuredWidth
-
-                Log.d("TTTT", "widthStart = $widthStart")
-            }
-        })
-
         tvStart?.viewTreeObserver!!.addOnGlobalLayoutListener {
             widthStartTvFake = tvStart.measuredWidth
         }
@@ -176,7 +96,6 @@ class MainActivity : TestActivity() {
 
 
         viewStartDrag?.setOnTouchListener { v, event ->
-            gestureDetectorStart.onTouchEvent(event)
             when (event!!.action) {
                 MotionEvent.ACTION_DOWN -> {
 
@@ -189,23 +108,18 @@ class MainActivity : TestActivity() {
                     var dX = newX - touchDownviewStartX
 
                     Log.d("TTTT", "dX = $dX")
-                    var newWidthStart: Int = (widthStart + dX).toInt()
-
-
-                    Log.d("TTTT", "newWidth = $newWidthStart")
-                    when {
-                        newWidthStart <= widthMinStart -> {
-                            newWidthStart = widthMinStart
-                        }
-                        newWidthStart + widthEnd >= widthSeekbarView -> {
-                            newWidthStart = widthSeekbarView - widthEnd
-                        }
+                    var newWidthStart: Int = (widthStart + Math.abs(dX)).toInt()
+                    if (dX > 0) {
+                        changeWidthView(viewGradient, newWidthStart)
+//                        translateX(viewGradient, (newWidthStart / 2).toFloat())
+//                        translateX(viewStartDrag, newWidthStart.toFloat())
+                    } else {
+                        changeWidthView(viewGradient, newWidthStart)
+//                        translateX(viewGradient, -(newWidthStart / 2).toFloat())
+//                        translateX(viewStartDrag, newWidthStart.toFloat())
                     }
 
-                    changeWidthView(viewStart, newWidthStart)
-                    val newWidthStartFake = newWidthStart - (widthStartTvFake / 2)
-                    changeWidthView(viewFakeBgStart, newWidthStartFake)
-                    calculateDurationStart(newWidthStart)
+
                 }
 
                 MotionEvent.ACTION_CANCEL -> {
@@ -227,59 +141,8 @@ class MainActivity : TestActivity() {
         view?.requestLayout()
     }
 
-    @SuppressLint("ClickableViewAccessibility")
-    private fun setupViewEnd() {
-        viewEnd?.viewTreeObserver!!.addOnGlobalLayoutListener {
-            widthEnd = viewEnd?.layoutParams!!.width
-            Log.d("TTTT", "widthEnd = $widthEnd")
-        }
-
-        viewEndDrag?.setOnTouchListener { v, event ->
-            when (event!!.action) {
-                MotionEvent.ACTION_DOWN -> {
-                    viewEndX = event.x
-                    Log.d("TTTT", "ACTION_DOWN")
-                    Log.d("TTTT", "widthScreen = $widthSeekbarView")
-                    Log.d("TTTT", "widthStart = $widthStart")
-                    Log.d("TTTT", "widthEnd = $widthEnd")
-                }
-
-                MotionEvent.ACTION_MOVE -> {
-                    Log.d("TTTT", "ACTION_MOVE")
-                    var newX = event.x
-                    var dX = viewEndX - newX
-                    var newWidth: Int = (widthEnd + dX).roundToInt()
-                    Log.d("TTTT", "newWidth = $newWidth")
-                    when {
-                        newWidth <= widthMinEnd -> {
-                            newWidth = widthMinEnd
-                        }
-                        newWidth + widthStart <= widthSeekbarView -> {
-                        }
-                        else -> {
-                            newWidth = widthSeekbarView - widthStart
-                            tvStart.translationX
-                        }
-                    }
-
-                    changeWidthView(viewEnd, newWidth)
-                    val newWidthStartFake = newWidth - (widthEndTvFake / 2)
-                    changeWidthView(viewFakeBgEnd, newWidthStartFake)
-                    calculateDurationEnd(newWidth)
-                }
-
-                MotionEvent.ACTION_CANCEL -> {
-                    callBack?.onEndStop(0L)
-                }
-
-                MotionEvent.ACTION_UP -> {
-                    callBack?.onEndStop(0L)
-                }
-
-            }
-
-            true
-        }
+    private fun translateX(view: View, width: Float) {
+        view?.translationX = width
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
