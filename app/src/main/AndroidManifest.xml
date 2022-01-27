@@ -22,7 +22,7 @@
         android:theme="@style/Theme.Covert_text_to_audio"
         tools:ignore="HardcodedDebugMode">
         <activity
-            android:name=".MainActivity2"
+            android:name=".MainActivity3"
             android:exported="true">
 
             <intent-filter>

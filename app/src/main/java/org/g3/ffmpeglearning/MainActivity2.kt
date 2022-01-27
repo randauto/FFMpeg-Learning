@@ -10,7 +10,6 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.ViewTreeObserver
 import android.widget.TextView
-import androidx.core.view.marginStart
 import kotlinx.android.synthetic.main.activity_main3.*
 import org.g3.ffmpeglearning.ui.TestActivity
 import org.g3.ffmpeglearning.views.IRangeSeekbarListener
@@ -19,13 +18,13 @@ import java.io.File
 
 class MainActivity2 : TestActivity() {
     var widthStart = 0
+    var widthEnd = 0
     var widthStartTvFake = 0
     var widthEndTvFake = 0
-    var widthEnd = 0
     var touchDownviewStartX = 0f
     var viewEndX = 0f
     var widthSeekbarView = 0
-    var widthMinStart: Int = 0
+    var maxWidth: Int = 0
     var widthMinEnd = 0
     var callBack: IRangeSeekbarListener? = null
 
@@ -33,30 +32,34 @@ class MainActivity2 : TestActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main3)
-        viewStartDrag?.viewTreeObserver!!.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
+        viewBgStart?.viewTreeObserver!!.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
             override fun onGlobalLayout() {
-                Log.d("viewStartDrag", "viewStartDrag.width = ${viewStartDrag.measuredWidth}")
-                Log.d("viewBgStart", "viewBgStart.marginStart = ${viewBgStart.marginStart}")
-                Log.d("viewStartDrag", "viewStartDrag.paddingStart = ${viewStartDrag.paddingStart}")
-                Log.d("viewStartDrag", "viewStartDrag.paddingEnd = ${viewStartDrag.paddingEnd}")
 
-                widthMinStart = viewStartDrag.measuredWidth + viewBgStart.marginStart + viewStartDrag.paddingStart
+                maxWidth = viewBgStart.measuredWidth / 2
 
-                Log.d("TTTT", "widthMinStart = $widthMinStart")
+                Log.d("TTTT", "widthMinStart = $maxWidth")
+
+                viewBgStart.viewTreeObserver.removeGlobalOnLayoutListener { this }
             }
         })
 
-        viewGradient?.viewTreeObserver!!.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
+        viewGradientStart?.viewTreeObserver!!.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
             override fun onGlobalLayout() {
-                widthStart = viewGradient.measuredWidth
+                widthStart = viewGradientStart.measuredWidth
+                Log.d("TTTT", "widthStart = $widthStart")
+//                viewGradientStart.viewTreeObserver.removeGlobalOnLayoutListener { this }
             }
         })
 
-        viewGradient?.viewTreeObserver!!.addOnGlobalLayoutListener {
-            widthSeekbarView = (viewGradient.measuredWidth + convertDpToPixel(45f, this)).toInt()
+        viewGradientEnd?.viewTreeObserver!!.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
+            override fun onGlobalLayout() {
+                widthEnd = viewGradientEnd.measuredWidth
 
-            Log.d("TTTT", "widthScreen = $widthSeekbarView")
-        }
+                Log.d("TTTT", "widthEnd = $widthEnd")
+//                viewGradientEnd.viewTreeObserver.removeGlobalOnLayoutListener { this }
+            }
+        })
+
 
         setupViewStart()
 
@@ -98,27 +101,65 @@ class MainActivity2 : TestActivity() {
         viewStartDrag?.setOnTouchListener { v, event ->
             when (event!!.action) {
                 MotionEvent.ACTION_DOWN -> {
-
+                    touchDownviewStartX = event.x
                 }
 
                 MotionEvent.ACTION_MOVE -> {
-                    Log.d("TTTT", "GestureDetector  = ACTION_MOVE")
-                    Log.d("TTTT", "ACTION_MOVE")
+                    Log.d("ACTION_MOVE", "GestureDetector  = ACTION_MOVE")
+                    Log.d("ACTION_MOVE", "ACTION_MOVE")
                     var newX = event.x
-                    var dX = newX - touchDownviewStartX
+                    var dX: Int = (newX - touchDownviewStartX).toInt()
 
-                    Log.d("TTTT", "dX = $dX")
-                    var newWidthStart: Int = (widthStart + Math.abs(dX)).toInt()
+                    Log.d("ACTION_MOVE", "dX = $dX")
+                    Log.d("ACTION_MOVE", "widthStart = $widthStart")
+                    Log.d("ACTION_MOVE", "widthEnd = $widthEnd")
+
                     if (dX > 0) {
-                        changeWidthView(viewGradient, newWidthStart)
-//                        translateX(viewGradient, (newWidthStart / 2).toFloat())
-//                        translateX(viewStartDrag, newWidthStart.toFloat())
-                    } else {
-                        changeWidthView(viewGradient, newWidthStart)
-//                        translateX(viewGradient, -(newWidthStart / 2).toFloat())
-//                        translateX(viewStartDrag, newWidthStart.toFloat())
-                    }
+                        if (widthStart > 0) {
+                            changeWidthView(viewGradientStart, dX)
+//                            translateX(viewGradientStart, -(dX / 2).toFloat())
+//                            translateX(viewStartDrag, -(dX).toFloat())
+                        } else {
+                            if (widthEnd > 0) {
+                                changeWidthView(viewGradientEnd, widthEnd/2 + dX)
+//                                translateX(viewGradientEnd, -(dX / 2).toFloat())
+//                                translateX(viewStartDrag, -(dX).toFloat())
+                            } else {
+                                if (widthEnd == 0) {
+                                    changeWidthView(viewGradientEnd, dX)
+                                } else {
+                                    changeWidthView(viewGradientEnd, widthEnd + dX)
+                                }
+//                                translateX(viewGradientEnd, (dX / 2).toFloat())
+//                                translateX(viewStartDrag, (dX).toFloat())
+                            }
 
+                        }
+
+
+                    } else {
+                        if (widthStart > 0) {
+                            changeWidthView(viewGradientStart, dX)
+                            translateX(viewGradientStart, -(dX / 2).toFloat())
+                            translateX(viewStartDrag, -(dX).toFloat())
+
+                        } else {
+                            changeWidthView(viewGradientStart, dX)
+                            translateX(viewGradientStart, (dX / 2).toFloat())
+                            translateX(viewStartDrag, (dX).toFloat())
+                        }
+
+                        if (widthEnd > 0) {
+                            changeWidthView(viewGradientEnd, dX)
+                            translateX(viewGradientEnd, -(dX / 2).toFloat())
+                            translateX(viewStartDrag, -(dX).toFloat())
+
+                        } else {
+                            changeWidthView(viewGradientEnd, dX)
+                            translateX(viewGradientEnd, (dX / 2).toFloat())
+                            translateX(viewStartDrag, (dX).toFloat())
+                        }
+                    }
 
                 }
 
@@ -142,7 +183,7 @@ class MainActivity2 : TestActivity() {
     }
 
     private fun translateX(view: View, width: Float) {
-        view?.translationX = width
+        view?.x = width
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -203,7 +244,7 @@ class MainActivity2 : TestActivity() {
         try {
             val widthSum = widthSeekbarView.toFloat()
             var durationStart: Float = 0f
-            if (newWidth == widthMinStart) {
+            if (newWidth == maxWidth) {
                 durationStart = 0f
             } else {
                 durationStart = ((newWidth * durationAudio) / widthSum)

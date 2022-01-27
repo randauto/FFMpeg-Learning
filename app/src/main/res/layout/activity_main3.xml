@@ -33,12 +33,17 @@
                 android:background="@drawable/bg_view_start_end" />
 
             <View
-                android:id="@+id/viewGradient"
+                android:id="@+id/viewGradientStart"
                 android:layout_width="0dp"
                 android:layout_height="5dp"
                 android:layout_centerInParent="true"
-                android:layout_marginStart="10dp"
-                android:layout_marginEnd="10dp"
+                android:background="@drawable/bg_view_center" />
+
+            <View
+                android:id="@+id/viewGradientEnd"
+                android:layout_width="0dp"
+                android:layout_height="5dp"
+                android:layout_centerInParent="true"
                 android:background="@drawable/bg_view_center" />
 
             <ImageView
@@ -108,9 +113,4 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Choose Audio" />
-
-
-    <org.g3.ffmpeglearning.views.SwagPoints
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
 </LinearLayout>

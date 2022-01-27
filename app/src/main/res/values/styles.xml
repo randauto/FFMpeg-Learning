@@ -1,0 +1,6 @@
+<resources>
+    <!-- Base application theme. -->
+    <style name="ProgressBarStyle" parent="@style/Widget.AppCompat.ProgressBar.Horizontal">
+
+    </style>
+</resources>

@@ -3,7 +3,7 @@
     <!-- Define the background properties like color etc -->
     <item android:id="@android:id/background">
         <shape>
-            <solid android:color="#58476F" />
+            <solid android:color="#58476F"/>
             <corners
                 android:bottomLeftRadius="0dp"
                 android:bottomRightRadius="20dp"

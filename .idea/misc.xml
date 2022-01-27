@@ -4,13 +4,20 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/Setup/test/FFMpeg Learning/app/src/main/res/drawable/bg_view_center.xml" value="0.3223958333333333" />
+        <entry key="..\:/Setup/test/FFMpeg Learning/app/src/main/res/drawable/bg_view_center_end.xml" value="0.276" />
         <entry key="..\:/Setup/test/FFMpeg Learning/app/src/main/res/drawable/bg_view_dot.xml" value="0.3223958333333333" />
         <entry key="..\:/Setup/test/FFMpeg Learning/app/src/main/res/drawable/bg_view_start_end.xml" value="0.5583333333333333" />
+        <entry key="..\:/Setup/test/FFMpeg Learning/app/src/main/res/drawable/border_shadow.xml" value="0.3075" />
+        <entry key="..\:/Setup/test/FFMpeg Learning/app/src/main/res/drawable/custom_thumb.xml" value="0.3075" />
+        <entry key="..\:/Setup/test/FFMpeg Learning/app/src/main/res/drawable/seekbar_progress.xml" value="0.3075" />
+        <entry key="..\:/Setup/test/FFMpeg Learning/app/src/main/res/drawable/seekbar_style.xml" value="0.3075" />
         <entry key="..\:/Setup/test/FFMpeg Learning/app/src/main/res/layout/activity_main2.xml" value="0.33" />
-        <entry key="..\:/Setup/test/FFMpeg Learning/app/src/main/res/layout/activity_main3.xml" value="0.25" />
+        <entry key="..\:/Setup/test/FFMpeg Learning/app/src/main/res/layout/activity_main3.xml" value="0.33" />
+        <entry key="..\:/Setup/test/FFMpeg Learning/app/src/main/res/layout/activity_main4.xml" value="0.5" />
         <entry key="..\:/Setup/test/FFMpeg Learning/app/src/main/res/layout/bg_view_start_end.xml" value="0.30625" />
         <entry key="..\:/Setup/test/FFMpeg Learning/app/src/main/res/layout/layout_equalizer.xml" value="0.5421875" />
         <entry key="..\:/Setup/test/FFMpeg Learning/app/src/main/res/layout/layout_test.xml" value="0.5421875" />
+        <entry key="..\:/Setup/test/FFMpeg Learning/app/src/main/res/layout/seekbar_single.xml" value="0.2713541666666667" />
         <entry key="..\:/Setup/test/covert_text_to_audio/app/src/main/res/layout/layout_test.xml" value="0.32708333333333334" />
         <entry key="..\:/covert_text_to_audio/app/src/main/res/layout/activity_main.xml" value="0.33645833333333336" />
         <entry key="..\:/covert_text_to_audio/app/src/main/res/layout/layout_reverse_audio.xml" value="0.35052083333333334" />
